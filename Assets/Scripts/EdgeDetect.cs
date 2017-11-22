@@ -15,8 +15,12 @@ public class EdgeDetect : MonoBehaviour {
             pos.x = 0;
             transform.position = new Vector3(right.x, this.transform.position.y + 3f, this.transform.position.x);
         }
-        if (pos.x > 1.0) { pos.x = 1;
+        if (pos.x > 1.0) {
+            pos.x = 1;
             transform.position = new Vector3(left.x, this.transform.position.y + 3f, this.transform.position.x);
         }
+
     }
+    
+ 
 }

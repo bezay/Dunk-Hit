@@ -6,21 +6,26 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class TapController : MonoBehaviour {
 
-    public float tapForce = 10;
-    public float tiltSmooth = 5;
+    public float tapForce = 10f;
+    public float tiltSmooth = 100f;
     public Vector3 startPos;
-  
-    //public Text score;
+
+    private int score;
+    public Text scoreText;
 
     Rigidbody2D rigidBody;
-    Quaternion downRoatation;
+   // Quaternion downRoatation;
     Quaternion forwardRotation;
     public Transform target;
 
+    float randx;
+    Vector2 whereToSpawn;
+
     private void Start()
     {
+        scoreText.text = "0";
         rigidBody = GetComponent<Rigidbody2D>();
-        downRoatation = Quaternion.Euler(0, 0, -90);
+       // downRoatation = Quaternion.Euler(0, 0, -90);
         forwardRotation = Quaternion.Euler(0, 0, 35);
 
     }
@@ -33,24 +38,31 @@ public class TapController : MonoBehaviour {
               transform.rotation = forwardRotation;
               rigidBody.velocity = Vector2.zero;
               rigidBody.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
-              rigidBody.AddForce(Vector2.right * tapForce, ForceMode2D.Force);
-            /*  Vector3 targetDir = target.position - transform.position;
-              float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
-              Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-              transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 180);
-
-              transform.Translate(Vector3.up * Time.deltaTime * 2);*/
+            
         }
-        // transform.rotation = Quaternion.Lerp(transform.rotation, downRoatation, tiltSmooth * Time.deltaTime);
- 
+        //transform.rotation = Quaternion.Lerp(transform.rotation, downRoatation, tiltSmooth * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target.position, tiltSmooth * Time.deltaTime);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "ScoreZone")
-        {
-           
+
+        if (collision.gameObject.tag == "ScoreZone")
+            {
+               // Destroy(collision.gameObject);
+                score += 1;
+                scoreText.text = score.ToString();
+
+                randx = Random.Range(-54f, 380f);
+                // whereToSpawn = new Vector2(randx, transform.position.y);
+                target.localPosition = new Vector3(677f,randx, 0);
+
         }
-      
+
+           // Destroy(GameObject.FindGameObjectWithTag("Board"));
     }
+
+
+
 }
